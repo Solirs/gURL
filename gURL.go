@@ -8,8 +8,6 @@ import (
 	"log"
 	"net"
 	"net/url"
-	"regexp"
-    "strings"
 )
 
 var httptype string
@@ -34,6 +32,7 @@ func main(){
     flag.Parse()
 
     url, err := url.Parse(u)
+
 
 
 
@@ -80,37 +79,28 @@ func main(){
 }
 
 
-func StatusCode(response string) string{
-    scode, err := regexp.Compile(`HTTP\/1.0 \s*([^\n\r ]*)*`)
 
-    checkError(err)
-
-
-    return scode.FindString(response)[len(scode.FindString(response))-3:]
-}
-
-func Redirectlocation(response string) string{
-    scode, err := regexp.Compile(`Location: \s*([^\n\r ]*)`)
-
-    checkError(err)
-
-    ret := strings.Trim(scode.FindString(response), "Location: ")
-
-
-    return ret
-}
 
 
 func GETRequestHTTP(u *url.URL) {
 
-    con, err := net.Dial("tcp", u.Host + ":80")
-    checkError(err)
+    fmt.Println(u.Host)
 
+    con, err := net.Dial("tcp", u.Host)
+
+    if err != nil{
+        con, err = net.Dial("tcp", u.Host + ":80")
+        checkError(err)
+    }
+
+    defer con.Close()
     
     req := fmt.Sprintf("GET %s HTTP/1.1\r\n", u.Path)
     req += fmt.Sprintf("Host: %v\r\n", u.Host)
     req += fmt.Sprintf("Connection: close\r\n")
     req += fmt.Sprintf("User-Agent: %v\r\n", uagent)
+
+    
 
     req += fmt.Sprintf("\r\n")
 
@@ -123,15 +113,19 @@ func GETRequestHTTP(u *url.URL) {
     res, err := io.ReadAll(con)
     checkError(err)
 
-    //fmt.Print(string(res))
+    fmt.Print(string(res))
 
     fmt.Print(Redirectlocation(string(res)), "\n")
 }
 
 func GETRequestHTTPS(u *url.URL) {
 
-    con, err := net.Dial("tcp", u.Host + ":443")
-    checkError(err)
+    con, err := net.Dial("tcp", u.Host)
+
+    if err != nil{
+        con, err = net.Dial("tcp", u.Host + ":443")
+        checkError(err)
+    }
 
     client := tls.Client(con, &tls.Config{
         ServerName: u.Host,
@@ -161,7 +155,7 @@ func GETRequestHTTPS(u *url.URL) {
     res, err := io.ReadAll(client)
     checkError(err)
 
-    //fmt.Print(string(res))
+    fmt.Print(string(res))
 
     fmt.Print(Redirectlocation(string(res)), "\n")
 }
@@ -175,8 +169,13 @@ func checkError(err error) {
 }
 
 func HEADRequest(u *url.URL){
-    con, err := net.Dial("tcp", u.Host + ":80")
-    checkError(err)
+
+    con, err := net.Dial("tcp", u.Host)
+
+    if err != nil{
+        con, err = net.Dial("tcp", u.Host + ":80")
+        checkError(err)
+    }
 
     
     req := "HEAD / HTTP/1.1\r\n"
@@ -196,8 +195,12 @@ func HEADRequest(u *url.URL){
 func POSTRequestHTTP(u *url.URL){
 
 
-    con, err := net.Dial("tcp", u.Host + ":80")
-    checkError(err)
+    con, err := net.Dial("tcp", u.Host)
+
+    if err != nil{
+        con, err = net.Dial("tcp", u.Host + ":80")
+        checkError(err)
+    }
 
     
     req := fmt.Sprintf("POST / HTTP/1.1\r\n")
@@ -224,8 +227,12 @@ func POSTRequestHTTP(u *url.URL){
 func POSTRequestHTTPS(u *url.URL){
 
 
-    con, err := net.Dial("tcp", u.Host + ":443")
-    checkError(err)
+    con, err := net.Dial("tcp", u.Host)
+
+    if err != nil{
+        con, err = net.Dial("tcp", u.Host + ":443")
+        checkError(err)
+    }
 
 
     client := tls.Client(con, &tls.Config{
