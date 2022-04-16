@@ -25,6 +25,10 @@ func (ghttp GURLHTTP)GETRequestHTTP(u *url.URL) {
     req += fmt.Sprintf("Connection: close\r\n")
     req += fmt.Sprintf("User-Agent: %v\r\n", uagent)
 
+    for i := 0; i < len(headers); i++{
+        req += fmt.Sprintf("%s\r\n", headers[i])
+    }
+
     
 
     req += fmt.Sprintf("\r\n")

@@ -4,6 +4,7 @@ import (
 	"flag"
 	"log"
 	"net/url"
+    "strings"
 )
 
 
@@ -15,11 +16,12 @@ type GURLHTTPS struct{
 
 }
 
-
+type arrayFlags []string
 var httptype string
 var u string
 var uagent string
 var content string
+var headers arrayFlags
 
 func initflags(){
 
@@ -27,9 +29,20 @@ func initflags(){
     flag.StringVar(&u, "u", "invalid", "URL")
     flag.StringVar(&uagent, "ua", "Iorem Ipsum", "User Agent") 
     flag.StringVar(&content, "c", "", "content") 
+    flag.Var(&headers, "H", "content") 
 
 
 }
+
+func (i *arrayFlags) String() string {
+    return "blahblahblah"
+}
+
+func (i *arrayFlags) Set(value string) error {
+    *i = append(*i, strings.TrimSpace(value))
+    return nil
+}
+
 
 func main(){
 
