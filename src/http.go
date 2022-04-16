@@ -60,6 +60,9 @@ func (ghttp GURLHTTP)HEADRequest(u *url.URL){
     
     req := "HEAD / HTTP/1.1\r\n"
     req += "Connection: close\r\n"
+    for i := 0; i < len(headers); i++{
+        req += fmt.Sprintf("%s\r\n", headers[i])
+    }
     req += "\r\n"
 
     _, err = con.Write([]byte(req))
@@ -90,6 +93,9 @@ func (ghttp GURLHTTP)POSTRequestHTTP(u *url.URL){
     req += fmt.Sprintf("Connection: close\r\n")
     req += fmt.Sprintf("Content-type: text/plain\r\n")
     req += fmt.Sprintf("Content-length: %d\r\n", len(content))
+    for i := 0; i < len(headers); i++{
+        req += fmt.Sprintf("%s\r\n", headers[i])
+    }
     req += fmt.Sprintf("\r\n")
     req += content
 

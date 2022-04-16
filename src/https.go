@@ -33,6 +33,9 @@ func (ghttps GURLHTTPS)GETRequestHTTPS(u *url.URL) {
     req += fmt.Sprintf("Host: %v\r\n", u.Host)
     req += fmt.Sprintf("Connection: close\r\n")
     req += fmt.Sprintf("User-Agent: %v\r\n", uagent)
+    for i := 0; i < len(headers); i++{
+        req += fmt.Sprintf("%s\r\n", headers[i])
+    }
     //req += fmt.Sprintf("Filename: %s\r\n", u.Path)
 
     req += fmt.Sprintf("\r\n")
@@ -81,6 +84,9 @@ func (ghttps GURLHTTPS)POSTRequestHTTPS(u *url.URL){
     req += fmt.Sprintf("Connection: close\r\n")
     req += fmt.Sprintf("Content-type: text/plain\r\n")
     req += fmt.Sprintf("Content-length: %d\r\n", len(content))
+    for i := 0; i < len(headers); i++{
+        req += fmt.Sprintf("%s\r\n", headers[i])
+    }
     req += fmt.Sprintf("\r\n")
     req += content
 
