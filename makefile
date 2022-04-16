@@ -1,2 +1,2 @@
 build:
-	go build gURL.go parsing.go http.go https.go
+	go build src/gURL.go src/parsing.go src/http.go src/https.go
