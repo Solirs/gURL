@@ -10,6 +10,16 @@ import (
 	"net/url"
 )
 
+
+type GURLHTTP struct{
+
+}
+
+type GURLHTTPS struct{
+
+}
+
+
 var httptype string
 var u string
 var uagent string
@@ -33,6 +43,9 @@ func main(){
 
     url, err := url.Parse(u)
 
+    ghttp := GURLHTTP{}
+    ghttps := GURLHTTPS{}
+
 
 
 
@@ -45,13 +58,13 @@ func main(){
 
         switch httptype {
         case "GET":
-            GETRequestHTTPS(url)
+            ghttps.GETRequestHTTPS(url)
     
         case "HEAD":
-            HEADRequest(url)
+            ghttp.HEADRequest(url)
     
         case "POST":
-            POSTRequestHTTPS(url)
+            ghttps.POSTRequestHTTPS(url)
     
         default:
             log.Fatal("Invalid or unsupported type specified, QUITTING!!!")
@@ -61,13 +74,13 @@ func main(){
 
         switch httptype {
         case "GET":
-            GETRequestHTTP(url)
+            ghttp.GETRequestHTTP(url)
     
         case "HEAD":
-            HEADRequest(url)
+            ghttp.HEADRequest(url)
     
         case "POST":
-            POSTRequestHTTP(url)
+            ghttp.POSTRequestHTTP(url)
     
         default:
             log.Fatal("Invalid or unsupported type specified, QUITTING!!!")
@@ -82,7 +95,7 @@ func main(){
 
 
 
-func GETRequestHTTP(u *url.URL) {
+func (ghttp GURLHTTP)GETRequestHTTP(u *url.URL) {
 
     fmt.Println(u.Host)
 
@@ -118,7 +131,7 @@ func GETRequestHTTP(u *url.URL) {
     fmt.Print(Redirectlocation(string(res)), "\n")
 }
 
-func GETRequestHTTPS(u *url.URL) {
+func (ghttps GURLHTTPS)GETRequestHTTPS(u *url.URL) {
 
     con, err := net.Dial("tcp", u.Host)
 
@@ -168,7 +181,7 @@ func checkError(err error) {
     }
 }
 
-func HEADRequest(u *url.URL){
+func (ghttp GURLHTTP)HEADRequest(u *url.URL){
 
     con, err := net.Dial("tcp", u.Host)
 
@@ -192,7 +205,7 @@ func HEADRequest(u *url.URL){
 
 }
 
-func POSTRequestHTTP(u *url.URL){
+func (ghttp GURLHTTP)POSTRequestHTTP(u *url.URL){
 
 
     con, err := net.Dial("tcp", u.Host)
@@ -224,7 +237,7 @@ func POSTRequestHTTP(u *url.URL){
 }
 
 
-func POSTRequestHTTPS(u *url.URL){
+func (ghttps GURLHTTPS)POSTRequestHTTPS(u *url.URL){
 
 
     con, err := net.Dial("tcp", u.Host)
